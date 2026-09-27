@@ -219,6 +219,8 @@
       "c7.k2": "Area",
       "c7.v2": "Giambellino, 150 metres from Piazza Tirana",
       "c7.k3": "Phone",
+      "c7.k4": "Metro",
+      "c7.v4": "M4 San Cristoforo, about 300 metres away",
       "c7.strada": "Directions to Via Gonin 7 →",
       "c7.mappa": "Map: Al Bocconcino, Via Francesco Gonin 7, Milan",
       "z.tipo": "Restaurant Pizzeria",
