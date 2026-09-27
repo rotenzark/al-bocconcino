@@ -1,0 +1,252 @@
+/* Al Bocconcino — «Vieni a provare la Racchetta.»
+   La pagina è la Racchetta vista dall'alto, sul nero della loro locandina: la testa (la loro foto dentro l'anello di crosta),
+   il manico (tutto il resto del sito, fra due bordi di crosta), la punta. Intorno, sul nero, le loro note: il corsivo oro
+   (Carattere), i bollini gialli, le maiuscole distanziate (Urbanist). Titoli in Vidaloka, testo in Red Hat Text.
+   La crosta la disegna _boc_crosta.mjs (img/crosta.webp, anello.webp, punta.webp); la posizione del bocconcino la scrive
+   _boc_testa.mjs nell'index. */
+
+/* ══════════ reset tecnico (PLUMBING_V 1) ══════════ */
+[hidden] { display: none !important; }
+img { max-width: 100%; height: auto; }
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; scroll-behavior: auto !important; }
+}
+
+/* ══════════ variabili ══════════ */
+:root {
+  --nero: #0F0D0B;
+  --nero-2: #1B1714;
+  --impasto: #F3E9D8; /* = l'interno di img/punta.webp */
+  --ink: #231A13;
+  --ink-2: #5B4A3B;
+  --oro: #E0B04C;
+  --oro-scuro: #875B10;
+  --giallo: #F2C14E;
+  --bianco: #F4EEE3;
+  --verde: #1F8A4C;
+  --rosso: #C8342E;
+  --f-corsivo: 'Carattere', 'Brush Script MT', cursive;
+  --f-titolo: 'Vidaloka', Georgia, serif;
+  --f-maiusc: 'Urbanist', Arial, sans-serif;
+  --f-testo: 'Red Hat Text', system-ui, sans-serif;
+  --gutter: 16px;
+  --testata: 64px;
+  /* la testa e il manico: larghezze, la crosta scala col manico (36 px su 440, come in punta.webp) */
+  --tw: min(640px, calc(100vw - 16px));
+  --mw: min(500px, calc(100vw - 32px));
+  --crosta: calc(var(--mw) * 0.0818);
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+html { scroll-behavior: smooth; scroll-padding-top: calc(var(--testata) + 12px); background: var(--nero); }
+body {
+  margin: 0; color: var(--bianco); background: var(--nero);
+  background-image: radial-gradient(ellipse 70% 900px at 50% 380px, rgba(224, 176, 76, .09), rgba(224, 176, 76, 0) 70%);
+  background-repeat: no-repeat;
+  font: 400 1.0625rem/1.65 var(--f-testo);
+  -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility;
+}
+img { display: block; }
+a { color: inherit; }
+p { margin: 0 0 1em; }
+h1, h2, h3 { font-weight: 400; margin: 0; }
+.sr { position: absolute !important; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); clip-path: inset(50%); white-space: nowrap; }
+.salta-al-testo { position: absolute; left: -9999px; top: 8px; z-index: 100; padding: 10px 14px; background: var(--bianco); color: var(--ink); font: 700 .9rem/1 var(--f-maiusc); }
+.salta-al-testo:focus { left: 8px; }
+:focus-visible { outline: 3px solid var(--oro); outline-offset: 3px; }
+.corsivo { font-family: var(--f-corsivo); font-weight: 400; }
+.link { font: 700 .82rem/1.3 var(--f-maiusc); letter-spacing: .1em; text-transform: uppercase; text-decoration: underline; text-underline-offset: 4px; }
+
+/* ══════════ testata ══════════ */
+.testata {
+  position: sticky; top: 0; z-index: 50; min-height: var(--testata);
+  display: flex; align-items: center; gap: 18px; padding: 8px var(--gutter);
+  background: rgba(15, 13, 11, .97); border-bottom: 1px solid #2A241F;
+}
+.marchio { display: inline-flex; align-items: baseline; gap: .26em; margin: 0; text-decoration: none; line-height: 1; }
+.marchio__al { font: 400 2rem/1 var(--f-corsivo); color: var(--oro); }
+.marchio__nome { font: 400 1.5rem/1 var(--f-titolo); color: var(--bianco); letter-spacing: .01em; }
+.voci { display: none; margin-left: auto; gap: 26px; }
+.voci a { padding: 10px 0; border-bottom: 2px solid transparent; font: 700 .76rem/1 var(--f-maiusc); letter-spacing: .14em; text-transform: uppercase; text-decoration: none; }
+.voci a:hover { border-color: var(--oro); }
+.testata__destra { margin-left: auto; display: flex; align-items: center; gap: 10px; }
+.lingue { display: flex; border: 1.5px solid #5A4F45; border-radius: 999px; overflow: hidden; }
+.lingue button { min-width: 40px; min-height: 36px; padding: 8px 10px; border: 0; background: transparent; color: var(--bianco); font: 700 .74rem/1 var(--f-maiusc); letter-spacing: .08em; cursor: pointer; }
+.lingue button[aria-pressed="true"] { background: var(--bianco); color: var(--nero); }
+.testata__prenota { display: inline-flex; align-items: center; min-height: 40px; padding: 8px 16px; border-radius: 999px; background: var(--giallo); color: var(--nero); font: 700 .78rem/1 var(--f-maiusc); letter-spacing: .12em; text-transform: uppercase; text-decoration: none; }
+.burger { width: 44px; height: 44px; display: inline-flex; flex-direction: column; align-items: center; justify-content: center; gap: 5px; border: 1.5px solid #5A4F45; border-radius: 10px; background: transparent; cursor: pointer; }
+.burger span { display: block; width: 20px; height: 2px; background: var(--bianco); }
+.indice-mobile { position: fixed; top: var(--testata); left: 0; right: 0; z-index: 49; display: flex; flex-direction: column; padding: 6px var(--gutter) 16px; background: var(--nero); border-bottom: 1px solid #2A241F; }
+.indice-mobile a { padding: 15px 4px; border-bottom: 1px solid #2A241F; font: 700 .9rem/1 var(--f-maiusc); letter-spacing: .12em; text-transform: uppercase; text-decoration: none; }
+@media (min-width: 1100px) { .voci { display: flex; } .testata__destra { margin-left: 20px; } .burger { display: none; } }
+@media (max-width: 560px) { .testata__prenota { display: none; } }
+@media (max-width: 360px) { .testata { gap: 10px; padding-left: 12px; padding-right: 12px; } .marchio__al { font-size: 1.5rem; } .marchio__nome { font-size: 1.28rem; } .lingue button { min-width: 34px; padding: 8px 7px; } .burger { width: 42px; height: 42px; } }
+
+/* ══════════ LA TESTA — la locandina ══════════ */
+.locandina { position: relative; z-index: 2; padding: clamp(18px, 3vw, 30px) var(--gutter) 0; text-align: center; }
+.locandina__sopra { margin: 0 0 6px; font: 700 .74rem/1.3 var(--f-maiusc); letter-spacing: .3em; text-transform: uppercase; color: var(--oro); }
+.locandina__titolo { display: flex; flex-direction: column; align-items: center; line-height: 1; margin-bottom: clamp(10px, 2vw, 18px); }
+.locandina__titolo .corsivo { font-size: clamp(2.1rem, 5.4vw, 3.4rem); color: var(--oro); line-height: .9; }
+.locandina__nome { font: 400 clamp(3.5rem, 12vw, 6.6rem)/.95 var(--f-titolo); color: var(--bianco); letter-spacing: .005em; }
+.locandina__nome::after { content: ""; display: block; height: 5px; margin: 10px auto 0; width: 62%; border-radius: 3px; background: linear-gradient(90deg, var(--verde) 0 33%, var(--bianco) 33% 66%, var(--rosso) 66%); opacity: .9; }
+.locandina__riga { display: grid; grid-template-columns: 1fr; justify-items: center; }
+.nota { display: none; margin: 0; }
+.nota__maiusc { display: block; font: 700 .95rem/1.35 var(--f-maiusc); letter-spacing: .2em; text-transform: uppercase; color: var(--bianco); }
+.nota__piccola { display: block; margin-top: 8px; font: 700 .76rem/1.4 var(--f-maiusc); letter-spacing: .22em; text-transform: uppercase; color: var(--oro); }
+.nota__corsivo { display: block; font: 400 1.9rem/1.08 var(--f-corsivo); color: var(--oro); }
+.nota__suggerimento { margin-top: 14px; }
+.nota__suggerimento::before { content: "↙ "; }
+@media (min-width: 1100px) {
+  .bollino--testa { right: -3%; }
+  .locandina__riga { grid-template-columns: 1fr var(--tw) 1fr; align-items: center; column-gap: 34px; }
+  .nota { display: block; max-width: 300px; }
+  .nota--sx { justify-self: end; text-align: right; }
+  .nota--dx { justify-self: start; text-align: left; }
+}
+
+/* la testa: foto dentro l'anello, il bocconcino sopra (la posizione la scrive _boc_testa.mjs) */
+.testa { position: relative; width: var(--tw); }
+.testa__dentro { position: relative; width: 100%; aspect-ratio: 1120 / 940; }
+.testa__foto { position: absolute; left: var(--foto-off, 7%); top: var(--foto-off, 7%); width: var(--foto-lato, 86%); height: var(--foto-lato, 86%); object-fit: cover; clip-path: ellipse(50% 50% at 50% 50%); }
+.testa__anello { position: absolute; inset: 0; width: 100%; height: 100%; filter: drop-shadow(0 10px 18px rgba(0, 0, 0, .55)); }
+.bocconcino { position: absolute; z-index: 3; display: block; }
+.bocconcino__img { position: relative; z-index: 2; width: 100%; height: 100%; }
+.bocconcino__ombra { position: absolute; z-index: 1; width: 64%; height: 18%; margin: -9% 0 0 -32%; border-radius: 50%; background: radial-gradient(closest-side, rgba(20, 12, 6, .55), rgba(20, 12, 6, 0)); }
+.bocconcino[role="button"] { cursor: pointer; }
+.bocconcino[role="button"]:focus-visible { outline: 3px solid var(--giallo); outline-offset: 4px; border-radius: 50%; }
+.firma-attesa .bocconcino__img, .firma-attesa .bocconcino__ombra { opacity: 0; }
+
+/* il bollino giallo (come nella loro locandina) */
+.bollino {
+  display: grid; place-items: center; width: 118px; height: 118px; margin: 0; padding: 14px; border-radius: 50%;
+  background: var(--giallo); color: var(--nero); text-align: center; transform: rotate(-9deg);
+  font: 700 .86rem/1.18 var(--f-maiusc); letter-spacing: .01em; /* minuscolo: in maiuscolo piccolo gli accenti di Ù e Ì sparivano */
+  box-shadow: 0 8px 18px rgba(0, 0, 0, .35), inset 0 0 0 3px rgba(15, 13, 11, .9), inset 0 0 0 5px var(--giallo);
+}
+.bollino--testa { position: absolute; z-index: 4; right: 5%; bottom: 4%; width: clamp(88px, 22vw, 124px); height: clamp(88px, 22vw, 124px); font-size: clamp(.72rem, 2vw, .86rem); }
+
+/* ══════════ IL MANICO ══════════ */
+.manico {
+  position: relative; z-index: 1; width: var(--mw); margin: calc(var(--tw) * -0.2098) auto 0;
+  padding: calc(var(--tw) * 0.2098 + 34px) calc(var(--crosta) + 22px) 30px;
+  background: var(--impasto); color: var(--ink);
+}
+.manico::before, .manico::after {
+  content: ""; position: absolute; top: 0; bottom: 0; width: var(--crosta);
+  background: url(../img/crosta.webp) repeat-y 0 0 / var(--crosta) auto;
+}
+.manico::before { left: 0; }
+.manico::after { right: 0; transform: scaleX(-1); background-position: 0 calc(var(--crosta) * 6.3); }
+/* la punta sale sul manico quanto la sua sfumatura in alto (24 px su 300 = 12 px su 150): sotto ci sono ancora le fasce */
+.punta { position: relative; z-index: 2; width: var(--mw); aspect-ratio: 880 / 300; margin: calc(var(--mw) * -12 / 440) auto 0; background: url(../img/punta.webp) no-repeat 0 0 / 100% 100%; }
+
+/* i capitoli */
+.cap { position: relative; padding: 46px 0 8px; }
+.cap + .cap { border-top: 1px dashed rgba(35, 26, 19, .18); }
+.cap--apertura { padding-top: 6px; text-align: center; }
+.cap__lede { font: 400 1.18rem/1.55 var(--f-testo); color: var(--ink); }
+.cap__nota { margin: 0 0 4px; font-size: 1.85rem; line-height: 1.05; color: var(--oro-scuro); text-align: center; }
+.cap__titolo { font: 400 clamp(2.4rem, 7vw, 3.2rem)/1 var(--f-titolo); color: var(--ink); text-align: center; margin-bottom: 18px; }
+.cap__testo p { margin-bottom: .9em; }
+.cap__piccolo { font-size: .88rem; color: var(--ink-2); }
+.bollino--cap { position: absolute; right: -6px; top: 18px; width: 92px; height: 92px; padding: 10px; font-size: .74rem; transform: rotate(8deg); }
+@media (min-width: 1100px) {
+  .cap__nota { position: absolute; right: calc(100% + var(--crosta) + 56px); top: 44px; width: 300px; text-align: right; color: var(--oro); font-size: 2.3rem; }
+  .bollino--cap { right: auto; left: calc(100% + var(--crosta) + 64px); top: 30px; width: 124px; height: 124px; padding: 14px; font-size: .9rem; }
+  .cap--apertura .cap__nota { display: none; }
+}
+/* sotto i 1100 px il bollino non sta fuori dal manico: diventa un'etichetta gialla sotto il titolo */
+@media (max-width: 1099px) {
+  .bollino--cap { position: static; display: table; width: auto; height: auto; margin: -8px auto 18px; padding: 7px 16px; border-radius: 999px; transform: rotate(-2deg); font-size: .8rem; box-shadow: 0 4px 10px rgba(0, 0, 0, .18); }
+}
+
+/* bottoni, stato, voti */
+.azioni { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin: 18px 0 6px; }
+.bottone { display: inline-flex; align-items: center; justify-content: center; min-height: 46px; padding: 10px 18px; border: 2px solid var(--ink); border-radius: 999px; color: var(--ink); font: 700 .76rem/1.1 var(--f-maiusc); letter-spacing: .12em; text-transform: uppercase; text-decoration: none; text-align: center; }
+.bottone:hover { background: var(--ink); color: var(--impasto); }
+.bottone--pieno { background: var(--nero); border-color: var(--nero); color: var(--giallo); }
+.bottone--pieno:hover { background: #2A241F; color: var(--giallo); }
+.stato-riga { margin: 12px 0 0; }
+.stato { display: inline-flex; align-items: center; gap: 8px; font: 700 .82rem/1.3 var(--f-maiusc); letter-spacing: .06em; }
+.stato::before { content: ""; flex: none; width: 10px; height: 10px; border-radius: 50%; background: #8A7F73; }
+.stato.is-aperto::before { background: #2E8B57; box-shadow: 0 0 0 3px rgba(46, 139, 87, .2); }
+.voti { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px 20px; margin: 14px 0 0; font: 700 .8rem/1.3 var(--f-maiusc); letter-spacing: .05em; }
+.voti a { text-decoration: none; }
+.voti b { margin-right: 4px; font: 400 1.7rem/1 var(--f-titolo); color: var(--oro-scuro); }
+.voti--grandi { margin: 0 0 20px; }
+.voti--grandi b { font-size: 2.3rem; }
+.suggerimento-mobile { margin: 16px 0 0; font-size: 1.5rem; line-height: 1; color: var(--oro-scuro); }
+@media (min-width: 1100px) { .suggerimento-mobile { display: none; } }
+
+/* foto (nelle cornici del piatto: bordo scuro sottile come i loro piatti) */
+.foto { margin: 0; }
+.foto__apri { display: block; width: 100%; padding: 0; border: 0; background: none; cursor: zoom-in; }
+.foto__apri img { width: 100%; border-radius: 6px; box-shadow: 0 0 0 1px rgba(35, 26, 19, .18), 0 10px 20px rgba(35, 26, 19, .18); }
+.foto figcaption { margin-top: 8px; font: 400 1.35rem/1.1 var(--f-corsivo); color: var(--ink-2); }
+.foto--larga { margin: 8px 0 22px; }
+.coppia { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin: 8px 0 22px; align-items: start; }
+.coppia .foto__apri img { aspect-ratio: 4 / 5; object-fit: cover; }
+
+/* i menù */
+.menu { margin-top: 6px; }
+.menu__titolo { margin: 22px 0 8px; font: 700 .8rem/1.2 var(--f-maiusc); letter-spacing: .24em; text-transform: uppercase; color: var(--oro-scuro); text-align: center; }
+.menu__titolo::before, .menu__titolo::after { content: " — "; letter-spacing: 0; }
+.menu__nota { font-size: .95rem; color: var(--ink-2); }
+.menu__lista { margin: 0; padding: 0; list-style: none; }
+.menu__lista li { padding: 9px 0; border-bottom: 1px dotted rgba(35, 26, 19, .28); line-height: 1.4; }
+.menu__lista b { font: 400 1.18rem/1.2 var(--f-titolo); color: var(--ink); }
+.menu__lista span { display: block; font-size: .92rem; color: var(--ink-2); }
+.menu__lista--corta span { display: inline; }
+.menu__lista--corta span::before { content: "· "; }
+
+/* la sala */
+.citazione { margin: 6px 0 22px; padding: 18px 20px; background: var(--nero); color: var(--bianco); border-radius: 6px; text-align: center; }
+.citazione p { margin: 0; font: 400 1.9rem/1.12 var(--f-corsivo); color: var(--oro); }
+.citazione footer { margin-top: 8px; font: 700 .7rem/1.3 var(--f-maiusc); letter-spacing: .18em; text-transform: uppercase; color: #CFC6B8; }
+.servizi { display: flex; flex-wrap: wrap; gap: 8px; margin: 14px 0 0; padding: 0; list-style: none; }
+.servizi li { padding: 6px 12px; border: 1.5px solid rgba(35, 26, 19, .35); border-radius: 999px; font: 700 .7rem/1.2 var(--f-maiusc); letter-spacing: .1em; text-transform: uppercase; }
+
+/* le recensioni: piccole locandine nere */
+.recensioni { display: grid; gap: 14px; margin: 0 0 14px; padding: 0; list-style: none; }
+.recensione { padding: 18px 20px 16px; background: var(--nero); color: var(--bianco); border-radius: 6px; }
+.recensione blockquote { margin: 0; }
+.recensione blockquote p { margin: 0; font-size: .98rem; line-height: 1.6; }
+.recensione__chi { margin: 10px 0 0; font: 700 .7rem/1.3 var(--f-maiusc); letter-spacing: .14em; text-transform: uppercase; color: var(--oro); }
+.taglio { font-family: Arial, Helvetica, sans-serif; font-style: normal; color: #CFC6B8; }
+
+/* la punta: prenota, orari, dove */
+.cap--punta { text-align: center; }
+.numerone { margin: 4px 0 6px; font: 400 clamp(2.3rem, 8vw, 3rem)/1 var(--f-titolo); }
+.numerone a { text-decoration: none; border-bottom: 3px solid var(--oro); }
+.orari { width: 100%; margin: 18px 0 0; border-collapse: collapse; text-align: left; font-size: .98rem; }
+.orari tr { border-bottom: 1px dotted rgba(35, 26, 19, .3); }
+.orari th { padding: 9px 4px; font: 700 .78rem/1.2 var(--f-maiusc); letter-spacing: .12em; text-transform: uppercase; }
+.orari td { padding: 9px 4px; text-align: right; font-variant-numeric: tabular-nums; }
+.orari tr.is-today { background: rgba(242, 193, 78, .28); }
+.dati { margin: 18px 0 10px; text-align: left; }
+.dati div { display: grid; grid-template-columns: 6.4em 1fr; gap: 10px; padding: 8px 0; border-top: 1px solid rgba(35, 26, 19, .14); }
+.dati dt { font: 700 .7rem/1.7 var(--f-maiusc); letter-spacing: .12em; text-transform: uppercase; color: var(--ink-2); }
+.dati dd { margin: 0; }
+.mappa { margin-top: 14px; border-radius: 6px; overflow: hidden; box-shadow: 0 0 0 1px rgba(35, 26, 19, .18); }
+.mappa iframe { display: block; width: 100%; height: 320px; border: 0; }
+
+/* ══════════ coda ══════════ */
+.coda { padding: 44px var(--gutter) 56px; text-align: center; color: #CFC6B8; }
+.marchio--coda { justify-content: center; margin-bottom: 14px; }
+.marchio--coda .marchio__al { font-size: 2.4rem; }
+.marchio--coda .marchio__nome { font-size: 2.1rem; }
+.coda__riga { font: 700 .8rem/1.6 var(--f-maiusc); letter-spacing: .08em; }
+.coda__cred { max-width: 46em; margin: 0 auto 14px; font-size: .86rem; }
+.coda a { color: var(--bianco); }
+.link--chiaro { color: var(--bianco); }
+
+/* ══════════ lightbox ══════════ */
+#lightbox { position: fixed; inset: 0; z-index: 90; display: flex; align-items: center; justify-content: center; padding: 24px; background: rgba(10, 8, 6, .94); }
+#lightbox img { max-width: min(1300px, 100%); max-height: 88vh; width: auto; }
+#lightboxClose { position: absolute; top: 14px; right: 16px; width: 48px; height: 48px; border: 2px solid rgba(255, 255, 255, .6); border-radius: 50%; background: transparent; color: #fff; font-size: 32px; line-height: 1; cursor: pointer; }
+
+/* ══════════ reveal (plumbing): lo stato nascosto solo dietro .js; mai sulla testa né sul bocconcino ══════════ */
+.js .reveal { opacity: 0; }
+.js .reveal.in-view { opacity: 1; }
+html:not(.js) .reveal { opacity: 1; }
+.reduced-motion .reveal { opacity: 1 !important; }
