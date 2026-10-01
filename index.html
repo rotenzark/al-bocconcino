@@ -3,6 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
 <script>(function(d){d.classList.remove('no-js');if(!matchMedia('(prefers-reduced-motion: reduce)').matches){d.classList.add('firma-attesa');setTimeout(function(){if(!window.__pallaPronta)d.classList.remove('firma-attesa')},2500)}})(document.documentElement)</script>
 <title>Al Bocconcino — Ristorante Pizzeria in Via Gonin 7, Milano · la Racchetta</title>
 <meta name="description" content="Al Bocconcino, ristorante pizzeria in Via Francesco Gonin 7 (Giambellino, Milano): la vera pizza napoletana lievitata 48 ore e cotta nel forno a legna, la Racchetta col manico ripieno di ricotta, pesce fresco, carne, il menù del giorno a pranzo. Prenota: 388 347 0465.">
@@ -18,9 +19,7 @@
 <link rel="icon" href="img/favicon.svg" type="image/svg+xml">
 <link rel="icon" href="img/favicon-32.png" sizes="32x32" type="image/png">
 <link rel="apple-touch-icon" href="img/apple-touch-icon.png">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Carattere&amp;family=Red+Hat+Text:ital,wght@0,400;0,500;0,700;1,400&amp;family=Urbanist:wght@600;700&amp;family=Vidaloka&amp;display=swap" rel="stylesheet">
+<link rel="stylesheet" href="fonts/fonts.css?v=1">
 <link rel="stylesheet" href="css/styles.css?v=1">
 <!-- BOCCONCINO:INIZIO -->
 <style>:root{--foto-off:7%;--foto-lato:86%}.bocconcino{left:29.2%;top:30.995%;width:24%;height:27.083%}.bocconcino__img{transform-origin:57.5% 94.74%}.bocconcino__ombra{left:57.5%;top:94.74%}</style>
@@ -320,7 +319,7 @@
     </dl>
     <p class="reveal"><a class="link" href="https://www.google.com/maps/dir/?api=1&amp;destination=Al+Bocconcino+Ristorante+Pizzeria+Via+Francesco+Gonin+7+Milano" target="_blank" rel="noopener" data-i18n="c7.strada">Indicazioni per Via Gonin 7 →</a></p>
     <div class="mappa reveal">
-      <iframe title="Mappa: Al Bocconcino, Via Francesco Gonin 7, Milano" data-i18n-title="c7.mappa" src="https://maps.google.com/maps?q=Al%20Bocconcino%20Ristorante%20Pizzeria%2C%20Via%20Francesco%20Gonin%207%2C%20Milano&amp;z=16&amp;output=embed" width="600" height="360" loading="lazy" referrerpolicy="no-referrer-when-downgrade" allowfullscreen></iframe>
+      <div class="mappa-clic" data-mappa-clic style="--mappa-h: 360px"><template><iframe title="Mappa: Al Bocconcino, Via Francesco Gonin 7, Milano" data-i18n-title="c7.mappa" src="https://maps.google.com/maps?q=Al%20Bocconcino%20Ristorante%20Pizzeria%2C%20Via%20Francesco%20Gonin%207%2C%20Milano&amp;z=16&amp;output=embed" width="600" height="360" loading="lazy" referrerpolicy="no-referrer-when-downgrade" allowfullscreen></iframe></template><div class="mappa-clic__velo"><a class="mappa-clic__btn" href="https://www.google.com/maps/dir/?api=1&amp;destination=Al+Bocconcino+Ristorante+Pizzeria+Via+Francesco+Gonin+7+Milano" target="_blank" rel="noopener">Mostra la mappa</a><p class="mappa-clic__nota">La mappa è di Google: aprendola, Google riceve il tuo indirizzo IP e può usare i suoi cookie.</p></div></div>
     </div>
   </section>
 
@@ -332,7 +331,7 @@
 <footer class="coda">
   <p class="marchio marchio--coda"><span class="marchio__al">Al</span><span class="marchio__nome">Bocconcino</span></p>
   <p class="coda__riga"><span data-i18n="z.tipo">Ristorante Pizzeria</span> · Via Francesco Gonin 7, 20147 Milano · <a href="tel:+393883470465">388 347 0465</a> · <a href="https://www.instagram.com/ristorante_albocconcino/" target="_blank" rel="noopener">Instagram</a></p>
-  <p class="coda__cred" data-i18n="z.cred">Sito dimostrativo realizzato da <a href="https://bespokestud.io" rel="noopener">Bespoke Studio</a> · testi e foto dal loro sito, dal loro menù e dal loro Instagram, dalla scheda Google e dalle recensioni pubbliche su Google e TheFork (settembre 2026).</p>
+  <p class="coda__cred" data-i18n="z.cred">Sito dimostrativo realizzato da <a href="https://bespokestud.io" rel="noopener">Bespoke Studio</a> · <a href="privacy.html">Privacy</a> · testi e foto dal loro sito, dal loro menù e dal loro Instagram, dalla scheda Google e dalle recensioni pubbliche su Google e TheFork (settembre 2026).</p>
   <p><a class="link link--chiaro" href="#racchetta" data-i18n="z.su">Torna su ↑</a></p>
 </footer>
 
@@ -341,5 +340,6 @@
   <img id="lightboxImg" src="" alt="">
 </div>
 
+<script src="js/mappa-clic.js?v=1" defer></script>
 </body>
 </html>
